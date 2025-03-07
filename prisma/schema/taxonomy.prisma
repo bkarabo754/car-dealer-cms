@@ -5,20 +5,20 @@ model Make {
     models      Model[]
     classifieds Classified[]
     createdAt   DateTime     @default(now()) @map("created_at")
-    updated     DateTime     @updatedAt @map("updated_at")
+    updatedAt   DateTime     @updatedAt @map("updated_at")
 
     @@map("makes")
 }
 
 model Model {
     id            Int            @id @default(autoincrement())
-    name          String         @unique
+    name          String
     makeId        Int            @map("make_id")
     make          Make           @relation(fields: [makeId], references: [id], onDelete: Cascade)
     modelVariants ModelVariant[]
     classifieds   Classified[]
     createdAt     DateTime       @default(now()) @map("created_at")
-    updated       DateTime       @updatedAt @map("updated_at")
+    updatedAt     DateTime       @updatedAt @map("updated_at")
 
     @@unique([makeId, name])
     @@map("models")

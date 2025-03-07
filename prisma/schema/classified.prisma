@@ -17,7 +17,7 @@ model Classified {
     modelVariantId Int              @map("model_variant_id")
     modelVariant   ModelVariant?    @relation(fields: [modelVariantId], references: [id])
     ulezCompliant  ULEZCompliance   @default(EXEMPT)
-    transition     Transmission     @default(MANUAL)
+    transmission   Transmission     @default(MANUAL)
     colour         Colour           @default(BLACK)
     fuelType       FuelType         @default(PETROL)
     bodyType       BodyType         @default(SEDAN)
