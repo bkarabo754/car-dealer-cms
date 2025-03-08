@@ -25,7 +25,8 @@
     "slug": "^10.0.0",
     "slugify": "^1.6.6",
     "tailwind-merge": "^3.0.2",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "unlazy": "^0.12.3"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
