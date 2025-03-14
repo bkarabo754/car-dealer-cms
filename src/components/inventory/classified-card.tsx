@@ -191,7 +191,7 @@ export const ClassifiedCard = (props: ClassifiedCardProps) => {
 
           <div className="mt-4 flex flex-col lg:flex-row space-y-2 lg:space-y-0 lg:gap-x-2 w-full">
             <Button
-              className="flex-1 transition-colors hover:borer-white hover:bg-primary hover:text-white py-2 lg:py-2.5 h-full text-xs md:text-sm xl:text-base"
+              className="flex-1 transition-colors hover:border-white hover:bg-primary text-black hover:text-white py-2 lg:py-2.5 h-full text-xs md:text-sm xl:text-base"
               asChild
               variant="outline"
               size="sm"
