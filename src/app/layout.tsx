@@ -1,16 +1,14 @@
+import { cn } from '@/lib/utils';
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
-import './globals.css';
 import { Mulish, Roboto } from 'next/font/google';
-import { cn } from '../lib/utils';
-// import { Toaster } from '../components/ui/sonner';
 import NextTopLoader from 'nextjs-toploader';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
-import { Toaster } from '../components/ui/sonner';
+import './globals.css';
+import { Toaster } from '@/components/ui/sonner';
 
 export const metadata: Metadata = {
   title: 'Car Dealer Website',
-  description: 'A sick dealer website with AI.',
+  description: 'A sick car dealer website with AI.',
 };
 
 const mulish = Mulish({
@@ -33,15 +31,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <NextTopLoader showSpinner={false} />
+    <html lang="en">
       <body
         className={cn(
-          'antialiased overscroll-none bg-background',
+          'antialiased overscroll-none bg-background font-heading',
           roboto.variable,
           mulish.variable
         )}
       >
+        <NextTopLoader showSpinner={false} />
         <NuqsAdapter>{children}</NuqsAdapter>
         <Toaster />
       </body>

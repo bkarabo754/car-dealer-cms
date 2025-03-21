@@ -1,89 +1,29 @@
 'use client';
 
-import Link from 'next/link';
-import { routes } from '../../config/route';
-import Image from 'next/image';
+import { type ClassifiedWithImages, MultiStepFormEnum } from '@/config/types';
 import {
-  ClassifiedWithImages,
-  Favourites,
-  MultiStepFormEnum,
-} from '../../config/types';
-import { Cog, Fuel, GaugeCircle, Paintbrush } from 'lucide-react';
-import { HTMLParser } from '../shared/html-parser';
-import { Colour, FuelType, OdoUnit, Transmission } from '@prisma/client';
-
-import { cn } from '../ui//button';
-import { Button } from '../ui/button';
-import { FavouriteButton } from './favourite-button';
-import { useEffect, useState } from 'react';
-import { usePathname } from 'next/navigation';
+  formatColour,
+  formatFuelType,
+  formatNumber,
+  formatOdometerUnit,
+  formatPrice,
+  formatTransmission,
+} from '@/lib/utils';
 import { AnimatePresence, motion } from 'framer-motion';
+import { Cog, Fuel, GaugeCircle, Paintbrush2 } from 'lucide-react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { HTMLParser } from '../shared/html-parser';
+import { Button } from '../ui/button';
+// import { ImgixImage } from "../ui/imgix-image";
+import { FavouriteButton } from './favourite-button';
+import { routes } from '@/config/route';
+import Image from 'next/image';
 
 interface ClassifiedCardProps {
   classified: ClassifiedWithImages;
   favourites: number[];
-}
-
-function formatNumber(num: number | null, options?: Intl.NumberFormatOptions) {
-  if (!num) return '0';
-
-  return new Intl.NumberFormat('en-GB', options).format(num);
-}
-
-function formatOdometerUnit(unit: OdoUnit) {
-  return unit === OdoUnit.MILES ? 'mi' : 'km';
-}
-
-function formatTransmission(transmission: Transmission) {
-  return transmission === Transmission.AUTOMATIC ? 'Automatic' : 'Manual';
-}
-
-function formatFuelType(fuelType: FuelType) {
-  switch (fuelType) {
-    case FuelType.PETROL:
-      return 'Petrol';
-    case FuelType.DIESEL:
-      return 'Diesel';
-    case FuelType.ELECTRIC:
-      return 'Electric';
-    case FuelType.HYBRID:
-      return 'Hybrid';
-    default:
-      return 'Unknown';
-  }
-}
-
-function formatColour(colour: Colour) {
-  switch (colour) {
-    case Colour.BLACK:
-      return 'Black';
-    case Colour.WHITE:
-      return 'White';
-    case Colour.SILVER:
-      return 'Silver';
-    case Colour.RED:
-      return 'Red';
-    case Colour.BLUE:
-      return 'Blue';
-    case Colour.BROWN:
-      return 'Brown';
-    case Colour.GOLD:
-      return 'Gold';
-    case Colour.GREEN:
-      return 'Green';
-    case Colour.GREY:
-      return 'Grey';
-    case Colour.ORANGE:
-      return 'Orange';
-    case Colour.PINK:
-      return 'Pink';
-    case Colour.PURPLE:
-      return 'Purple';
-    case Colour.YELLOW:
-      return 'Yellow';
-    default:
-      return 'Unknown';
-  }
 }
 
 const getKeyClassifiedInfo = (classified: ClassifiedWithImages) => {
@@ -105,12 +45,12 @@ const getKeyClassifiedInfo = (classified: ClassifiedWithImages) => {
     {
       id: 'fuelType',
       icon: <Fuel className="w-4 h-4" />,
-      value: classified?.fuelType ? formatFuelType(classified?.fuelType) : null,
+      value: classified?.fuelType ? formatFuelType(classified.fuelType) : null,
     },
     {
       id: 'colour',
-      icon: <Paintbrush className="w-4 h-4" />,
-      value: classified?.colour ? formatColour(classified?.colour) : null,
+      icon: <Paintbrush2 className="w-4 h-4" />,
+      value: classified?.colour ? formatColour(classified.colour) : null,
     },
   ];
 };
@@ -122,7 +62,6 @@ export const ClassifiedCard = (props: ClassifiedCardProps) => {
   const [isFavourite, setIsFavourite] = useState(
     favourites.includes(classified.id)
   );
-
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
@@ -136,7 +75,7 @@ export const ClassifiedCard = (props: ClassifiedCardProps) => {
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
-          className="bg-white relative rounded-md shadow-md overflow-hidden flex flex-col"
+          className="bg-white relative rounded-md shadow-md overflow-hiddem flex flex-col"
         >
           <div className="aspect-3/2 relative">
             <Link href={routes.singleClassified(classified.slug)}>
@@ -145,7 +84,7 @@ export const ClassifiedCard = (props: ClassifiedCardProps) => {
                 blurDataURL={classified.images[0]?.blurhash}
                 src={classified.images[0]?.src}
                 alt={classified.images[0]?.alt}
-                className="object-cover"
+                className="object-cover rounded-t-md"
                 fill={true}
                 quality={25}
               />
@@ -157,63 +96,68 @@ export const ClassifiedCard = (props: ClassifiedCardProps) => {
             />
             <div className="absolute top-2.5 right-3.5 bg-primary text-slate-50 font-bold px-2 py-1 rounded">
               <p className="text-xs lg:text-base xl:text-lg font-semibold">
-                {classified.price}
+                {formatPrice({
+                  price: classified.price,
+                  currency: classified.currency,
+                })}
               </p>
             </div>
           </div>
           <div className="p-4 flex flex-col space-y-3">
-            <Link
-              className="text:sm md:text-base lg:text-lg font-semibold line-clamp-1 transition-colors hover:text-primary"
-              href={routes.singleClassified(classified.slug)}
-            >
-              {classified.title}
-            </Link>
-            {classified?.description && (
-              <div className="text-xs md:text text-gray-500 font-semibold">
-                <HTMLParser html={classified.description} />
-                &nbsp;
-              </div>
-            )}
-
-            <ul className="text-xs md:text-sm text-gray-600 xl:flex grid grid-cols-1 grid-rows-4 md:grid-cols-2 md:grid-rows-4 items-center justify-between w-full">
-              {getKeyClassifiedInfo(classified)
-                .filter((v) => v.value)
-                .map(({ id, icon, value }) => (
-                  <li
-                    key={id}
-                    className="font-semibold flex xl:flex-col items-center gap-x-1.5"
-                  >
-                    {icon} {value}
-                  </li>
-                ))}
-            </ul>
-          </div>
-
-          <div className="mt-4 flex flex-col lg:flex-row space-y-2 lg:space-y-0 lg:gap-x-2 w-full">
-            <Button
-              className="flex-1 transition-colors hover:border-white hover:bg-primary text-black hover:text-white py-2 lg:py-2.5 h-full text-xs md:text-sm xl:text-base"
-              asChild
-              variant="outline"
-              size="sm"
-            >
+            <div>
               <Link
-                href={routes.reserve(
-                  classified.slug,
-                  MultiStepFormEnum.WELCOME
-                )}
+                href={routes.singleClassified(classified.slug)}
+                className="text-sm md:text-base lg:text-lg font-semibold line-clamp-1 transition-colors hover:text-primary"
               >
-                Reserve
+                {classified.title}
               </Link>
-            </Button>
-            <Button
-              className="flex-1 py-2 lg:py-2.5 h-full text-xs md:text-sm xl:text-base"
-              asChild
-              size="sm"
-            >
-              <Link href={routes.singleClassified(classified.slug)}>
-                View Details
-              </Link>
-            </Button>
+              {classified?.description && (
+                <div className="text-xs md:text-sm xl:text-base text-gray-500 line-clamp-2">
+                  <HTMLParser html={classified.description} />
+                  &nbsp;{' '}
+                  {/* Used for equal spacing across each card in the grid */}
+                </div>
+              )}
+
+              <ul className="text-xs md:text-sm text-gray-600 xl:flex grid grid-cols-1 grid-rows-4 md:grid-cols-2 md:grid-rows-4 items-center justify-between w-full">
+                {getKeyClassifiedInfo(classified)
+                  .filter((v) => v.value)
+                  .map(({ id, icon, value }) => (
+                    <li
+                      key={id}
+                      className="font-semibold flex xl:flex-col items-center gap-x-1.5"
+                    >
+                      {icon} {value}
+                    </li>
+                  ))}
+              </ul>
+            </div>
+            <div className="mt-4 flex flex-col lg:flex-row space-y-2 lg:space-y-0 lg:gap-x-2 w-full">
+              <Button
+                className="flex-1 transition-colors hover:border-white hover:bg-primary hover:text-white py-2 lg:py-2.5 h-full text-xs md:text-sm xl:text-base"
+                asChild
+                variant="outline"
+                size="sm"
+              >
+                <Link
+                  href={routes.reserve(
+                    classified.slug,
+                    MultiStepFormEnum.WELCOME
+                  )}
+                >
+                  Reserve
+                </Link>
+              </Button>
+              <Button
+                className="flex-1 py-2 lg:py-2.5 h-full text-xs md:text-sm xl:text-base"
+                asChild
+                size="sm"
+              >
+                <Link href={routes.singleClassified(classified.slug)}>
+                  View Details
+                </Link>
+              </Button>
+            </div>
           </div>
         </motion.div>
       )}
