@@ -1,17 +1,18 @@
 'use client';
 
-import { HeartIcon } from 'lucide-react';
-import { Button } from '../ui/button';
-import { useRouter } from 'next/navigation';
-import { api } from '../../lib/api-client';
-import { endpoints } from '../../config/endpoints';
+import { endpoints } from '@/config/endpoints';
+import { api } from '@/lib/api-client';
 import { cn } from '@/lib/utils';
+import { HeartIcon } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { Button } from '../ui/button';
 
 type FavouriteButtonProps = {
   setIsFavourite: (isFavourite: boolean) => void;
   isFavourite: boolean;
   id: number;
 };
+
 export const FavouriteButton = (props: FavouriteButtonProps) => {
   const { setIsFavourite, isFavourite, id } = props;
 
@@ -21,6 +22,7 @@ export const FavouriteButton = (props: FavouriteButtonProps) => {
     const { ids } = await api.post<{ ids: number[] }>(endpoints.favourites, {
       json: { id },
     });
+
     if (ids.includes(id)) setIsFavourite(true);
     else setIsFavourite(false);
     setTimeout(() => router.refresh(), 250);

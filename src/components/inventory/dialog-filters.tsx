@@ -1,27 +1,6 @@
 'use client';
-
-import { SidebarProps } from '@/config/types';
-import { useRouter } from 'next/navigation';
-import { parseAsString, useQueryStates } from 'nuqs';
-import { ChangeEvent, useEffect, useState } from 'react';
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  DialogTrigger,
-} from '../ui/dialog';
-import { Button } from '../ui/button';
-import { Settings2 } from 'lucide-react';
-import { Select } from '../ui/select';
-import {
-  BodyType,
-  Colour,
-  CurrencyCode,
-  FuelType,
-  OdoUnit,
-  Transmission,
-  ULEZCompliance,
-} from '@prisma/client';
+import type { SidebarProps } from '@/config/types';
+import { env } from '@/env';
 import {
   cn,
   formatBodyType,
@@ -31,17 +10,37 @@ import {
   formatTransmission,
   formatUlezCompliance,
 } from '@/lib/utils';
+import {
+  BodyType,
+  Colour,
+  CurrencyCode,
+  FuelType,
+  OdoUnit,
+  Transmission,
+  ULEZCompliance,
+} from '@prisma/client';
+import { Settings2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { parseAsString, useQueryStates } from 'nuqs';
+import { type ChangeEvent, useEffect, useState } from 'react';
+import { SearchInput } from '../shared/search-input';
+import { Button } from '../ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from '../ui/dialog';
+import { Select } from '../ui/select';
 import { RangeFilter } from './range-filters';
 import { TaxonomyFilters } from './taxonomy-filters';
-import { SearchInput } from '../shared/search-input';
 import { routes } from '@/config/route';
-import { env } from '@/env';
 
-interface DialogFilterProps extends SidebarProps {
+interface DialogFiltersProps extends SidebarProps {
   count: number;
 }
 
-export const DialogFilters = (props: DialogFilterProps) => {
+export const DialogFilters = (props: DialogFiltersProps) => {
   const { minMaxValues, searchParams, count } = props;
 
   const { _min, _max } = minMaxValues;
@@ -112,7 +111,7 @@ export const DialogFilters = (props: DialogFilterProps) => {
     <Dialog open={open} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button variant="outline" size="icon" className="lg:hidden">
-          <Settings2 className="w-4 h-4" />
+          <Settings2 className="w-4 h-4" />{' '}
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-[425px] h-[90vh] overflow-y-auto rounded-xl bg-white">
@@ -123,10 +122,12 @@ export const DialogFilters = (props: DialogFilterProps) => {
             </div>
             <div className="mt-2" />
           </div>
+
           <SearchInput
             placeholder="Search classifieds..."
             className="w-full px-3 py-2 border rounded-md focus:outline-hidden focus:ring-2 focus:ring-blue-500"
           />
+
           <div className="space-y-2">
             <TaxonomyFilters
               searchParams={searchParams}
@@ -187,7 +188,6 @@ export const DialogFilters = (props: DialogFilterProps) => {
                 value,
               }))}
             />
-
             <Select
               label="Transmission"
               name="transmission"
@@ -260,6 +260,7 @@ export const DialogFilters = (props: DialogFilterProps) => {
               }))}
             />
           </div>
+
           <div className="flex flex-col space-y-2">
             <Button
               type="button"
