@@ -1,10 +1,11 @@
 'use client';
 
 import { HeartIcon } from 'lucide-react';
-import { Button, cn } from '../ui/button';
+import { Button } from '../ui/button';
 import { useRouter } from 'next/navigation';
 import { api } from '../../lib/api-client';
 import { endpoints } from '../../config/endpoints';
+import { cn } from '@/lib/utils';
 
 type FavouriteButtonProps = {
   setIsFavourite: (isFavourite: boolean) => void;
