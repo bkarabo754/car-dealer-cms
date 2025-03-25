@@ -1,6 +1,5 @@
 'use server';
 
-// import type { PrevState } from "@/config/types";
 import { prisma } from '@/lib/prisma';
 import { CustomerStatus } from '@prisma/client';
 import {

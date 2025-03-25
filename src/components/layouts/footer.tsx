@@ -52,7 +52,7 @@ export const PublicFooter = () => {
       </div>
       <div className="container mx-auto mt-8 text-center text-gray-700">
         <h4 className="text-lg font-bold text-primary">Company Info</h4>
-        <p>Company No. 123456789 | VAT No. GB123456789</p>
+        <p>Company No. 185462389 | VAT No. ZA753642187</p>
         <p>
           Majestic Motors is not authorised and not regulated by the Financial
           Conduct Authority
